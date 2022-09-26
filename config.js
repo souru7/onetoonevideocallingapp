@@ -5,7 +5,7 @@ const EduCloudKitDomain = "https://roomkit-edu-api.zego.im";
 const Domain = "https://roomkit-api.zego.im"; // RoomKit 后台请求主域名
 
 // 以下信息请修改为控制台获取的实际值
-const SecretID = 1904513;
+const SecretID = 2054736379;
 const SecretSign =
-  "ff2636ae992fc67f817fae3e1d58969f799f57d94ada99ad1ad64c94f302baab";
+  "4ea0ce885e4f8fcb5d0fbeb95905fc3d";
 const ProductID = 1592;
