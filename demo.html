@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./assets/images/logo.png" type="image/x-icon" rel="icon">
+    <title>ZegoRoomKit</title>
+    <style>
+        /* Zego 自定义字体 */
+        @font-face {
+            font-family: 'ZgFont';
+            src: url('./lib/SourceHanSansSC-Regular.otf');
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+
+<script src="./config.js"></script>
+<script src="./ZegoRoomKit.js?v=2.1.22.288"></script>
+<script src="./lib/md5.js"></script>
+<script src="./lib/axios.min.js"></script>
+<script src="./lib/request.js"></script>
+<script src="./public.js"></script>
+<script src="./lang/zh-CN.js"></script>
+<script src="./lang/en.js"></script>
+
+<script>
+    // demo多语言设置
+    const langC = navigator.systemLanguage ? navigator.systemLanguage : navigator.language
+    var lang
+    if (/^zh/.test(langC)) {
+        lang = zh
+    } else {
+        lang = en
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const cookies = new Cookies();
+    const toast = Toast.getInstance();
+    const api = Api.getInstance();
+    let userId;
+    userId = Number(urlParams.get('user'));
+
+    // 初始化SDK
+    const zg = new ZegoRoomKit();
+    zg.init({
+        secretID: SecretID,
+    })
+    // 快速加入时的摄像头麦克风设置 默认true
+    const mic = urlParams.get('m') === '1' ? false : true;
+    const camera = urlParams.get('c') === '1' ? false : true;
+    // 自定义标题
+    const title = urlParams.get('title');
+    // 隐藏主持人结束房间按钮
+    const isEndRoomButtonHidden = urlParams.get('isEndRoomButtonHidden') ===
+        'true' ? true : false;
+    // 隐藏房间人数
+    const isMemberCountHidden = urlParams.get('isMemberCountHidden') ===
+        'true' ? true : false;
+    // 隐藏设备检测流程
+    const isMemberEquipmentInspectionHidden =
+        urlParams.get('isMemberEquipmentInspectionHidden') === 'true' ? true : false;
+    // 隐藏进房消息
+    const isMemberJoinRoomMessageHidden = urlParams.get('isMemberJoinRoomMessageHidden') ===
+        'true' ? true : false;
+    // 隐藏退房消息
+    const isMemberLeaveRoomMessageHidden = urlParams.get('isMemberLeaveRoomMessageHidden') ===
+        'true' ? true : false;
+    const isVideoViewAutoHidden =
+        urlParams.get('isVideoViewAutoHidden') === 'true' ? true : false;
+    // 隐藏企业云盘文件
+    const isCompanyFilesHidden = urlParams.get('isCompanyFilesHidden') === 'true' ? true : false;
+    // 是否固定展示进退房消息
+    const isFixedInOutMessage =
+        urlParams.get('isFixedInOutMessage') === 'true' ? true : false;
+    // 是否开启笔锋
+    const enableHandwriting = urlParams.get('enableHandwriting') === 'true' ? true : false;
+    zg.roomSettings().setIsMicrophoneOnWhenJoiningRoom(mic);
+    zg.roomSettings().setIsCameraOnWhenJoiningRoom(camera);
+    joinRoom();
+
+    async function joinRoom() {
+        try {
+            const token = await getSDKToken(userId);
+            let info = null;
+            const beginTimestamp = urlParams.get('beginTimestamp');
+            const roomType = Number(urlParams.get('roomType'));
+            info = await getRoomInfo(userId, urlParams.get('room'));
+            if (info && roomType !== info.roomType) {
+                // 房间类型不同时房间标题置空 房间标题应从房间内中获取 
+                info.subject = ''
+            }
+            zg.inRoomService().setUserParameter({
+                avatarUrl: 'https://img2.baidu.com/it/u=325567737,3478266281&fm=26&fmt=auto&gp=0.jpg',
+                customIconUrl: 'http://www.gov.cn/guoqing/site1/20100928/001aa04acfdf0e0bfb6401.gif',
+            })
+            zg.inRoomService().setRoomParameter({
+                subject: title || (info && info.subject),
+                beginTimestamp: (beginTimestamp && Number(beginTimestamp)) || info && info.beginTimestamp,
+                // hostNickname: 'wwww'
+            })
+            zg.inRoomService().setUIConfig({
+                isEndRoomButtonHidden,
+                isMemberCountHidden,
+                isMemberEquipmentInspectionHidden,
+                isMemberJoinRoomMessageHidden,
+                isMemberLeaveRoomMessageHidden,
+                isVideoViewAutoHidden,
+                isCompanyFilesHidden,
+                isFixedInOutMessage,
+                enableHandwriting
+            })
+
+            zg.setAdvancedConfig({
+                domain: Domain,
+            })
+            const res = await zg.inRoomService().joinRoomWithConfig({
+                userID: userId,
+                userName: urlParams.get('name'),
+                roomID: urlParams.get('room'),
+                token: token,
+                role: Number(urlParams.get('role')),
+                productID: Number(urlParams.get('pid')),
+            }, 'app')
+            let interval = setInterval(() => {
+                if (document.getElementById('shareModule')) {
+                    document.getElementById('shareModule').style.fontFamily = 'ZgFont'
+                    clearInterval(interval);
+                }
+            }, 1000)
+        } catch (err) {
+            // 加入课堂失败
+            if (err.error === 4020009) {
+                toast.error('房间助教已满')
+            } else if (err.error === 4020008) {
+                toast.error('房间学生已满')
+            } else if (err.error === 4020010) {
+                toast.error('老师已存在')
+            } else {
+                toast.error(lang.room_join_failed + ':' + err.error) // 加入房间失败
+            }
+
+            setTimeout(() => {
+                window.history.back()
+            }, 3000)
+            throw err;
+        }
+    }
+
+    async function getRoomInfo(uid, roomId) {
+        try {
+            const classDetail = await api.post('/room/get', {
+                uid: uid,
+                room_id: roomId,
+                pid: Number(urlParams.get('pid'))
+            });
+            return classDetail;
+        } catch (error) {
+            return null;
+        }
+
+    }
+    // 发送自定义消息
+    function sendCustomCommand() {
+        zg.inRoomService().sendCustomCommand('hello world', []).then(res => {
+            if (res.error === 0) {
+                console.log('发送成功')
+            } else {
+                console.log('发送失败')
+            }
+        })
+    }
+    // 发送卡片消息
+    function sendCustomMessage() {
+        zg.inRoomService().sendCustomMessage({
+            type: 1,
+            title: '点我试试',
+            text: '这是一个卡片消息',
+            imagePath: 'https://img2.baidu.com/it/u=325567737,3478266281&fm=26&fmt=auto&gp=0.jpg',
+            linkPath: 'https://zego.im',
+            openWay: 1,
+            h5OpenWidth: "200",
+            h5OpenHeight: "100",
+
+        })
+    }
+    // 监听结束房间事件
+    zg.on('endRoom', () => {
+        console.log('------endRoom-------')
+    })
+    // 监听离开房间事件
+    zg.on('leaveRoom', () => {
+        console.log('------leaveRoom-------')
+        window.location.replace('./login.html');
+    })
+    // 监听被踢出房间事件
+    zg.on('kickedOutOfRoom', () => {
+        console.log('------kickedOutOfRoom-------')
+        // window.history.back()
+        // window.location.replace('about:blank');
+        window.location.replace('./login.html');
+    })
+    zg.on('receiveCustomCommand', (data) => {
+        console.log('data', data);
+    })
+    zg.on('messageEventNotify', (event, messageInfo) => {
+        console.log('messageEventNotify', event, messageInfo);
+    })
+    zg.on('capturedAudioData', (data, dataLength) => {
+        // console.log('pcm',data,dataLength)
+    })
+</script>
+
+</html>

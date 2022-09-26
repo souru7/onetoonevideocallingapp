@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="./assets/images/logo.png" type="image/x-icon" rel="icon">
+        <title>ZegoRoomKit</title>
+        <style>
+            *{
+                margin: 0;
+            }
+            .wrapper {
+                width: 100%;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: #101012;
+                margin: 0;
+                position: absolute;
+                z-index: 105;
+            }
+            .img {
+                margin-bottom: 22px;
+                width: 160px;
+                height: 160px;
+                background-image: url('../../assets/images/browser-default-img.png');
+                background-size: cover;
+            }
+            .title {
+                margin-bottom: 19px;
+                font-size: 24px;
+                color: #edf1fa;
+            }
+            .desc {
+                margin-bottom: 50px;
+                font-size: 16px;
+                color: #9a9a9a;
+            }
+            .btn {
+                width: 180px;
+                height: 44px;
+                font-size: 16px;
+                color: #edf1fa;
+                background-color: #0a84fe;
+                border-radius: 22px;
+                border: none;
+                cursor: pointer;
+            }
+            .btn:hover {
+                background-color: #0a97fc;
+            }
+            .btn:active {
+                background-color: #0aacfc;
+            }
+            .btn:focus {
+                outline: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="img"></div>
+            <div class="title">不支持使用当前浏览器加入课堂</div>
+            <div class="desc">请使用 Google Chrome 浏览器 74及以上版本加入</div>
+            <button class="btn" onclick="download()">下载谷歌浏览器</button>
+        </div>
+    </body>
+</html>
+<script>
+    console.log(window.location.search.substr(1))
+    const url = window.location.search.substr(1)
+    const system = url.split('=')[1]
+    
+    function download() {
+        let url = 'https://www.google.cn/intl/zh-CN/chrome';
+        if (system === 'macOS') {
+            url = 'https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg';
+        }
+        if (system === 'windows') {
+            url =
+                'https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7BDC0927D3-BE15-F700-E46F-786F5103C6AC%7D%26lang%3Dzh-CN%26browser%3D4%26usagestats%3D1%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26ap%3Dx64-stable-statsdef_1%26installdataindex%3Dempty/update2/installers/ChromeSetup.exe';
+        }
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '';
+        a.click();
+    }
+</script>

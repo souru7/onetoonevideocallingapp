@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./assets/images/logo.png" type="image/x-icon" rel="icon">
+    <title>ZegoRoomKit</title>
+    <style>
+        @font-face {
+            font-family: 'iconfont';
+            src: url('./iconfont/iconfont.eot?t=1622112789486');
+            /* IE9 */
+            src: url('./iconfont/iconfont.eot?t=1622112789486#iefix') format('embedded-opentype'),
+                /* IE6-IE8 */
+                url('./iconfont/iconfont.woff2?t=1622112789486') format('woff2'),
+                url('./iconfont/iconfont.woff?t=1622112789486') format('woff'),
+                url('./iconfont/iconfont.ttf?t=1622112789486') format('truetype'),
+                url('./iconfont/iconfont.svg?t=1622112789486#zgfont') format('svg');
+        }
+
+        body {
+            background-color: #F4F5F8;
+        }
+
+        .top {
+            display: flex;
+            min-width: 880px;
+            height: 60px;
+            box-sizing: border-box;
+            padding: 0 30px 0 40px;
+        }
+
+        .banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 100%;
+        }
+
+        .banner .title-wrap {
+            display: flex;
+            align-items: center;
+        }
+
+        .banner .title-wrap .logo {
+            width: 91px;
+            height: 22px;
+            background: url('./assets/images/roomkit_logo.png') no-repeat center;
+            background-size: 100%;
+        }
+
+        .banner .btn-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .banner .btn-box .options {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 40px;
+            font-size: 14px;
+            color: #666666;
+            cursor: pointer;
+            margin-left: 40px;
+        }
+
+        .banner .btn-box .options:hover {
+            color: #333;
+        }
+
+        .banner .btn-box .options:last-child {
+            margin-left: 24px;
+        }
+
+        .banner .btn-box .options .setting {
+            width: 60px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        .triangle {
+            display: block;
+            margin-left: 9px;
+        }
+
+        .banner .menu-bg {
+            display: none;
+            position: absolute;
+            top: 37px;
+            right: 0;
+            background-color: #fff;
+            padding: 10px 0;
+            box-shadow: 0px 2px 4px 0px rgba(101, 102, 110, 0.16);
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        .menu-bg .tips {
+            margin: 6px 15px 4px;
+            font-size: 10px;
+            line-height: 1.5;
+            color: #b1b4bb;
+            border-top: 1px solid #e6e6e6;
+        }
+
+        .menu-bg .tips .text {
+            padding-top: 10px;
+        }
+
+        .banner .menu {
+            width: auto;
+            height: 32px;
+            padding: 0 15px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* background-color: #fff; */
+            /* border-radius: 4px; */
+            /* box-shadow: 0px 2px 4px 0px rgba(101, 102, 110, 0.16); */
+        }
+
+        .banner .menu .icon {
+            display: none;
+            width: 12px;
+            height: 12px;
+            line-height: 12px;
+            color: #2953ff;
+        }
+
+        .banner .menu-item {
+            white-space: nowrap;
+            box-sizing: border-box;
+            padding-right: 52px;
+            width: 100%;
+            height: 32px;
+            line-height: 32px;
+            font-size: 14px;
+            color: #0f0f0f;
+        }
+
+        .banner .menu:hover {
+            background: #eef2ff;
+        }
+
+        .login-box {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            display: flex;
+            width: 880px;
+            height: 510px;
+            background: #fff;
+            box-shadow: 0px 4px 21px 0px rgba(0, 0, 0, 0.08);
+            border-radius: 4px;
+        }
+
+        .img-box {
+            display: flex;
+            align-items: center;
+            background-color: #f9fafb;
+            width: 460px;
+            height: 510px;
+        }
+
+        .login-img {
+            margin: 0 40px;
+            width: 400px;
+            height: 400px;
+            background-image: url('./assets/images/login-img.png');
+            background-size: cover;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            margin: 60px 0 0 70px;
+            width: 280px;
+            height: 334px;
+        }
+
+        .content .menu {
+            display: flex;
+            align-items: center;
+            margin-bottom: 36px;
+            color: #000;
+            font-size: 20px;
+            line-height: 20px;
+        }
+
+        .line {
+            margin: 0 18px;
+            width: 1px;
+            height: 16px;
+            background-color: #d7d9dc;
+        }
+
+        #createClass {
+            color: #000;
+        }
+
+        /* .menu-item:hover {
+                color: #000000;
+            } */
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-item {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .form-item .label {
+            margin-bottom: 5px;
+            font-size: 12px;
+            line-height: 14px;
+            color: #585c62;
+        }
+
+        .form-item input {
+            padding: 13px 14px;
+            width: 280px;
+            border: none;
+            font-size: 14px;
+            line-height: 14px;
+            background-color: #f4f5f8;
+            border-radius: 6px;
+            box-sizing: border-box;
+            color: #0F0F0F;
+        }
+
+        .form-item .options {
+            padding: 13px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 280px;
+            font-size: 14px;
+            line-height: 16px;
+            color: #93959a;
+            cursor: pointer;
+            box-sizing: border-box;
+            background-color: #F4F5F8;
+            border-radius: 6px;
+        }
+
+        .form-item .options .icon {
+            width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-item .options .icon .triangle {
+            margin-left: 0px;
+        }
+
+        .form-item .type-bg {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: #fff;
+            padding: 10px 0;
+            z-index: 2;
+            width: 280px;
+            box-shadow: 0px 6px 30px 0px rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+        }
+
+        .form-item .type-bg .type {
+            width: 100%;
+            height: 42px;
+            box-sizing: border-box;
+            cursor: pointer;
+            color: #0f0f0f;
+            text-align: center;
+        }
+
+        .form-item .type-bg .type-item {
+            box-sizing: border-box;
+            width: 100%;
+            height: 42px;
+            line-height: 42px;
+            font-size: 14px;
+            color: #0f0f0f;
+        }
+
+        .form-item .type-bg .type-item:hover {
+            background-color: #eef2ff;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #93959a;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none !important;
+        }
+
+        .content .btn-box {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .content .btn-box button {
+            width: 280px;
+            height: 42px;
+            font-size: 14px;
+            background-color: #2953ff;
+            border-radius: 6px;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .create {
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            line-height: 14px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #2953FF;
+            margin-top: 26px;
+            cursor: pointer;
+        }
+
+        .content .btn-box button:disabled {
+            cursor: not-allowed;
+            opacity: 0.4;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 11px;
+        }
+
+        .settings-item .wrap {
+            display: flex;
+            align-items: center;
+        }
+
+        .settings-item .tips {
+            width: 12px;
+            line-height: 12px;
+            margin-left: 7px;
+            cursor: pointer;
+            color: #b0b2b8;
+        }
+
+        .settings-item .tips:hover {
+            color: #93959a;
+        }
+
+        .switch-box {
+            position: relative;
+            width: 32px;
+            height: 16px;
+            background-color: #ccc;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .switch-box::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            border-radius: 100%;
+            transition: all 0.3s;
+            width: 12px;
+            height: 12px;
+            background-color: #fff;
+        }
+
+        .switch-box.is-checked {
+            background-color: #2a54ff;
+        }
+
+        .switch-box.is-checked::after {
+            left: 100%;
+            margin-left: -14px;
+        }
+
+        .edit {
+            position: fixed;
+            right: 36px;
+            bottom: 36px;
+            display: flex;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0px 4px 21px 0px rgba(0, 0, 0, 0.08);
+        }
+
+        .edit:hover {
+            box-shadow: none;
+        }
+
+        .edit>i {
+            font-family: "iconfont" !important;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            border-radius: 4px;
+            background-color: #444;
+            color: #fff;
+            padding: 6px;
+
+        }
+
+        .edit:hover>i {
+            background-color: #2953FF;
+        }
+
+        .edit>div {
+            display: none;
+        }
+
+        .edit:hover>div {
+            display: block;
+            width: 108px;
+            height: 44px;
+            line-height: 44px;
+            margin-right: 6px;
+            font-size: 14px;
+            border-radius: 4px;
+            text-align: center;
+            color: #2953ff;
+            background-color: #fff;
+            box-shadow: 0px 4px 21px 0px rgba(0, 0, 0, 0.08);
+
+        }
+
+        .close {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .close:before,
+        .close:after {
+            position: absolute;
+            content: ' ';
+            height: 12px;
+            width: 1.6px;
+            border-radius: 2px;
+            background-color: #999999;
+        }
+
+        .close:before {
+            transform: rotate(45deg);
+        }
+
+        .close:after {
+            transform: rotate(-45deg);
+        }
+
+        .setting-dialog-mask {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: none;
+        }
+
+        .class-type-box {
+            width: 334px;
+            height: 410px;
+            background: #FFFFFF;
+            border-radius: 4px;
+
+        }
+
+        .setting-dialog-mask .class-type-box {
+            width: 380px;
+            height: 360px;
+            background: #FFFFFF;
+            border-radius: 4px;
+        }
+
+        .class-type-box .class-type-title-box {
+            /* width: 448px; */
+            height: 48px;
+            padding: 0 8px 0 30px;
+            background: #FFFFFF;
+            border-radius: 4px 4px 0px 0px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #F1F1F1;
+        }
+
+        .class-type-title-box p {
+            width: 88px;
+            font-size: 14px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .class-type-main {
+            padding: 31px 66px 10px;
+            /* height: 195px; */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .class-type-item-box {
+            margin-bottom: 30px;
+            width: 68px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .class-type-item-box p {
+            /* height: 11px; */
+            font-size: 12px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #0F0F0F;
+            margin-top: 14px;
+        }
+
+        .class-type-item {
+            width: 68px;
+            height: 68px;
+            background: #FFFFFF;
+            box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.08);
+            border-radius: 34px;
+            background-size: 100%;
+            background-position: center;
+            cursor: pointer;
+        }
+
+        .class-type-item:hover {
+            background: linear-gradient(45deg, #2953FF, #427CFD);
+            box-shadow: 0px 4px 14px 0px rgba(41, 83, 255, 0.3);
+            background-position: center;
+        }
+
+        .class-type-item div {
+            width: 34px;
+            height: 34px;
+            margin: 17px auto;
+        }
+
+        .class-type-item-active {
+            background: linear-gradient(45deg, #2953FF, #427CFD);
+            box-shadow: 0px 4px 14px 0px rgba(41, 83, 255, 0.3);
+            background-position: center;
+        }
+
+        .class-type-btn {
+            width: 92px;
+            height: 30px;
+            background: #2953FF;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #EDF1FA;
+            text-align: center;
+            line-height: 30px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px 0 30px;
+            height: 48px;
+        }
+
+        .settings-item .env-tips {
+            display: none;
+            position: absolute;
+            top: 17px;
+            left: -6px;
+            width: 204px;
+            height: 54px;
+            background: rgba(20, 23, 32, 0.88);
+            box-shadow: 0px 1px 4px 0px rgba(101, 102, 109, 0.3);
+            border-radius: 4px;
+            color: #fff;
+            font-size: 12px;
+            line-height: 18px;
+            box-sizing: border-box;
+            padding: 9px 12px;
+        }
+
+        .settings-item .btn-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .settings-item .btn-box .options {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            font-size: 14px;
+            color: #040404;
+            cursor: pointer;
+            margin-left: 24px;
+        }
+
+        .settings-item .label {
+            display: flex;
+            align-items: center;
+            line-height: 48px;
+            font-size: 14px;
+            color: #0f0f0f;
+        }
+
+        .settings-item .name {
+            color: #666;
+        }
+
+        .settings-item .menu {
+            padding: 0 15px;
+            width: auto;
+            height: 32px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-item .menu:hover {
+            background-color: #eef2ff;
+        }
+
+        .settings-item .menu .icon {
+            display: none;
+            width: 12px;
+            height: 12px;
+            line-height: 12px;
+            color: #2953ff;
+        }
+
+        .settings-item .menu-item {
+            white-space: nowrap;
+            box-sizing: border-box;
+            padding-right: 52px;
+            width: 100%;
+            height: 32px;
+            line-height: 32px;
+            font-size: 14px;
+            color: #0f0f0f;
+        }
+
+        .settings-item .menu-bg {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #fff;
+            padding: 10px 0;
+            display: none;
+            height: auto;
+            z-index: 2;
+            top: 26px;
+            box-shadow: 0px 6px 30px 0px rgba(0, 0, 0, 0.08);
+            border-radius: 4px;
+        }
+
+        .switch-box {
+            position: relative;
+            width: 32px;
+            height: 16px;
+            background-color: #ccc;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .switch-box::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            border-radius: 100%;
+            transition: all 0.3s;
+            width: 12px;
+            height: 12px;
+            background-color: #fff;
+        }
+
+        .switch-box.is-checked {
+            background-color: #2a54ff;
+        }
+
+        .switch-box.is-checked::after {
+            left: 100%;
+            margin-left: -14px;
+        }
+
+        .setting-main {
+            margin-top: 9px;
+        }
+
+
+
+        #trg6 {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top">
+        <div class="banner">
+            <div class="title-wrap">
+                <div class="logo"></div>
+            </div>
+            <div class="btn-box">
+                <div class="options" onmouseenter="showMenu(1)" onmouseleave="showMenu('false')">
+                    <span class="sub language">简体中文</span>
+                    <span class="triangle"><i class="iconfont fontsize-12" id="trg6">&#59059;</i></span>
+                    <div class="menu-bg">
+                        <div class="menu" onclick="selectLang(this, 0)">
+                            <div class="menu-item ">简体中文</div>
+                            <div class="icon arrow2"><i class="iconfont fontsize-12">&#59060;</i></div>
+                        </div>
+                        <div class="menu" onclick="selectLang(this, 1)">
+                            <div class="menu-item ">English</div>
+                            <div class="icon arrow2"><i class="iconfont fontsize-12">&#59060;</i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="options">
+                    <div class="setting lang" data-locale="setting" onclick="openSetting()">设置</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="login-box">
+        <div class="img-box">
+            <div class="login-img"></div>
+        </div>
+        <div class="content" style="visibility: hidden;">
+            <div class="menu">
+                <span data-locale="attendClass" id="addClass" class="menu-item lang">加入课堂</span>
+            </div>
+            <div class="form">
+                <div id="roomID" class="form-item">
+                    <input class="lang" data-locale="enterClassID" type="tel" name="roomID" maxlength="12" value=""
+                        placeholder="请输入课堂ID" pattern="\d*" oninput="onClassIDInput(this)" />
+                </div>
+                <div class="form-item">
+                    <input class="lang" data-locale="enterName" type="text" name="userName" maxlength="20" value=""
+                        placeholder="请输入姓名" oninput="onNameInput(this)" />
+                </div>
+                <div class="form-item">
+                    <div class="options type-menu" onclick="showTypeMenu(1)">
+                        <span id="role" class="lang" data-locale="quick_join_select_role">请选择角色</span>
+                        <div class="icon"><span class="triangle" id="trg2"><i
+                                    class="iconfont fontsize-12">&#59059;</i></span></div>
+                    </div>
+                    <div class="type-bg">
+                        <div class="type">
+                            <div class="type-item type-role lang" data-locale="quick_join_select_role_attendee"
+                                onclick="selectRole(event,2)">学生</div>
+                        </div>
+                        <div class="type ta">
+                            <div class="type-item type-role lang" data-locale="quick_join_select_role_assistant"
+                                onclick="selectRole(event,4)">助教</div>
+                        </div>
+                        <div class="type">
+                            <div class="type-item type-role lang" data-locale="quick_join_select_role_host"
+                                onclick="selectRole(event,1)">老师</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-box">
+                <button id="addBtn" class="lang" data-locale="attendClass" disabled
+                    onclick="handleSubmit()">加入课堂</button>
+                <div data-locale="teacherCreateClass" class="create lang" onclick="hostLogin()">我是老师，创建课堂</div>
+            </div>
+        </div>
+    </div>
+    <!--设置 弹窗-->
+    <div class="setting-dialog-mask">
+        <div class="class-type-box center">
+            <div class="class-type-title-box">
+                <p class="lang" data-locale="setting">设置</p>
+                <div class="close type-close" onclick="hideSettingDialog()"></div>
+            </div>
+            <div class="setting-main">
+                <div class="settings-item">
+                    <div class="label lang" data-locale="room_language">语言</div>
+                    <div class="btn-box" onclick="showSettingMenu(this, 1)">
+                        <span class="name language ">简体中文</span>
+                        <!-- <span class="name language lang" >English</span> -->
+                        <span class="triangle" id="trg4"><i class="iconfont fontsize-12"
+                                style="color:#666">&#59059;</i></span>
+                        <div class="menu-bg set-bg">
+                            <div class="menu" onclick="selectLang(this, 0)">
+                                <div class="menu-item ">简体中文</div>
+                                <div class="icon arrow2"><i class="iconfont fontsize-12">&#59060;</i></div>
+                            </div>
+                            <div class="menu" onclick="selectLang(this, 1)">
+                                <div class="menu-item ">English</div>
+                                <div class="icon arrow2"><i class="iconfont fontsize-12">&#59060;</i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="label lang" data-locale="setting_room_mic_on_when_joining">进入房间时将麦克风开启</div>
+                    <div class="switch-box MP" onclick="selectMP(this)"></div>
+                </div>
+                <div class="settings-item">
+                    <div class="label lang" data-locale="setting_room_camera_on_when_joining">进入房间时将摄像头开启</div>
+                    <div class="switch-box CM" onclick="selectCamera(this)"></div>
+                </div>
+                <div class="settings-item">
+                    <div class="label lang" data-locale="setting_item_L3">大班课低延迟模式</div>
+                    <div class="switch-box LD" onclick="selectLow(this)"></div>
+                </div>
+                <div class="settings-item">
+                    <div class="label lang" data-locale="setting_item_Handwriting">开启笔锋</div>
+                    <div class="switch-box Handwriting" onclick="selectHandwriting(this)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 打开反馈入口 -->
+    <div class="edit" id="edit">
+        <div class="lang" data-locale="feedback">意见反馈</div>
+        <i>&#xe6ad;</i>
+    </div>
+</body>
+
+</html>
+<script src="./config.js"></script>
+<script src="./ZegoRoomKit.js?v=2.1.22.288"></script>
+<script src="./lib/md5.js"></script>
+<script src="./lib/axios.min.js"></script>
+<script src="./public.js"></script>
+<script src="./lang/zh-CN.js"></script>
+<script src="./lang/en.js"></script>
+<script src="./lib//systemInfo.js"></script>
+
+<script>
+    let env = 1; // 默认环境 国内 
+    let language = 1; // 默认语言 中文
+    let microphoneStatus = false; // 麦克风开启状态
+    let cameraStatus = false; // 摄像头开启
+    let lowDelayStatus = false; // 低延迟状态
+    let enableHandwriting = true;
+    var lang, role, roleHTML;
+    let userId;
+    const cookies = new Cookies();
+    const toast = Toast.getInstance();
+
+    // 之前登录过,自动登录
+    if (cookies.getItem('uid')) {
+        window.location.replace('./classList.html');
+    }
+    let addBtnEl = document.querySelector('#addBtn');
+    microphoneStatus = cookies.getItem('microphoneStatus') === 'true' || false;
+    cameraStatus = cookies.getItem('cameraStatus') === 'true' || false
+    lowDelayStatus = cookies.getItem('lowDelay') === 'true' || false
+    enableHandwriting = cookies.getItem('enableHandwriting') === 'false' ? false : true;
+    if (cookies.getItem('env')) env = Number(cookies.getItem('env'))
+
+    initDemoLanguage();
+    loadProperties();
+    initFeedback();
+    checkSettings();
+    window.addEventListener('click', this.handleClick, {
+        passive: false
+    })
+
+    // 初始化调查问卷
+    function initFeedback() {
+        const systemInfo = new SystemInfo().getInfo();
+        document.getElementById('edit').addEventListener('click', () => {
+            const appVs = ZegoRoomKit.version();
+            const appVsArr = appVs.split('.');
+            const appVersion = ((Number(appVsArr[0]) & 0xf) << 28) |
+                ((Number(appVsArr[1]) & 0xf) << 24) |
+                ((Number(appVsArr[2]) & 0xf) << 20) |
+                (Number(appVsArr[3]) & 0xfffff);
+            const lang = cookies.getItem("language") === '2' ? 'en' : 'ch';
+            window.open(
+                `https://demo-operation.zego.im/feedback/roomkit/index.html?platform=32&system_version=${systemInfo.system}_${systemInfo.systemVs}&app_version=${appVersion}&sdk_version=${appVs}&device_id=${systemInfo.browser}_${systemInfo.browserVs}&client=${systemInfo.browser}_${systemInfo.browserVs}&lang=${lang}`
+            );
+        })
+    }
+    // 初始化demo语言
+    function initDemoLanguage() {
+        if (cookies.getItem('language')) {
+            language = Number(cookies.getItem('language'))
+        } else {
+            // 没有语言缓存就用浏览器首选语言
+            const langC = navigator.systemLanguage ? navigator.systemLanguage : navigator.language;
+            if (/^zh/.test(langC)) {
+                language = 1;
+            } else {
+                language = 2;
+            }
+        }
+        lang = language == 1 ? zh : en;
+    }
+    // 更新demo文案，切换语言
+    function loadProperties() {
+        const langArr = document.querySelectorAll('.lang')
+        langArr.forEach(item => {
+            item.innerText = lang[item.getAttribute('data-locale')];
+            item.setAttribute('placeholder', lang[item.getAttribute('data-locale')])
+        });
+        document.querySelector('.content').style.visibility = 'visible'
+    }
+    //  点击“加入课堂”
+    async function handleSubmit() {
+        const userName = document.querySelector('input[name="userName"]').value;
+        const roomID = document.querySelector('input[name="roomID"]').value;
+        // 快速加入
+        const tmpUserId = getUid(userName); // 生成临时tmp_uid
+        const pid = ProductID;
+        // 附带个人信息和设置信息
+        window.location.href = `./demo.html?user=${tmpUserId}&room=${roomID}&name=${encodeURIComponent(userName)}&c=${cameraStatus ? 2 : 1
+            }&m=${microphoneStatus ? 2 : 1}&role=${role}&pid=${pid}&enableHandwriting=${enableHandwriting}`;
+    }
+    // 点击“我是老师创建课堂”
+    function hostLogin() {
+        const teacherUserId = getUid(ZegoRoomKit.deviceID()); // 生成临时tmp_uid
+        cookies.setItem('uid', teacherUserId);
+        cookies.setItem('userName', teacherUserId);
+        window.location.replace('./classList.html');
+    }
+    // 监听input，显示提交按钮
+    function onNameInput(e) {
+        addBtnEl.disabled = e.value && document.querySelector('input[name="roomID"]').value && role ?
+            false : true;
+    }
+    // 监听input，显示提交按钮
+    function onClassIDInput(e) {
+        e.value = e.value.replace(/[^0-9]/g, '');
+        addBtnEl.disabled = e.value && document.querySelector('input[name="userName"]').value && role ?
+            false : true;
+    }
+
+    // 控制顶部banner的下拉菜单
+    function showMenu(data) {
+        const menu = document.querySelectorAll('.menu-bg');
+        const trg6 = document.querySelector('#trg6');
+        if (data === 1) {
+            menu[0].style = 'display:block';
+            trg6.style = 'transform:rotate(180deg)';
+        }
+        if (data === 'false') {
+            menu[1].style = 'display:none';
+            trg6.style = 'transform:rotate(0deg)';
+        }
+    }
+    // 控制课堂类型角色的下拉菜单
+    function showTypeMenu(data) {
+        const type = document.querySelectorAll('.type-bg')
+        const trg2 = document.querySelector('#trg2')
+        if (data === 1) {
+            if (type[0].style.display === 'block') {
+                type[0].style = 'display:none';
+                trg2.style = 'transform:rotate(0deg)'
+            } else {
+                type[0].style = 'display:block';
+                trg2.style = 'transform:rotate(180deg)'
+            }
+        }
+    }
+
+    // 选择角色
+    function selectRole(event, memberRole) {
+        const type = document.querySelectorAll('.type-bg')
+        const text = document.querySelector('#role')
+        const typeRole = document.querySelectorAll('.type-role')
+        const trg2 = document.querySelector('#trg2')
+        trg2.style = 'transform:rotate(0deg)'
+        for (let i = 0; i < typeRole.length; i++) {
+            typeRole[i].style = 'color: #0f0f0f'
+        }
+        event.target.style.color = '#2953ff'
+        text.innerHTML = event.target.innerText
+        text.style.color = '#0F0F0F'
+        type[0].style = 'display:none';
+        role = memberRole
+        addBtnEl.disabled = document.querySelector('input[name="roomID"]').value && document.querySelector(
+            'input[name="userName"]').value && role ? false : true;
+    }
+
+    // 打开设置弹窗
+    function openSetting() {
+        const mask = document.querySelector('.setting-dialog-mask');
+        mask.style.display = 'block';
+    }
+
+    // 关闭设置弹窗
+    function hideSettingDialog() {
+        const mask = document.querySelector('.setting-dialog-mask');
+        const trg4 = document.querySelector('#trg4')
+        trg4.style = 'transform:rotate(0deg)'
+        mask.style.display = 'none';
+        const menu = document.querySelectorAll('.set-bg')
+        menu[0].style = 'display:none'
+    }
+
+    // 选择语言
+    function selectLang(event, data) {
+        const arrow = document.querySelectorAll('.arrow2')
+        const menu = document.querySelectorAll('.menu-bg')
+        menu[0].style = 'display:none'
+        const text = document.querySelectorAll('.language')
+        text[0].textContent = event.children[0].textContent
+        text[1].textContent = event.children[0].textContent
+        if (data == '0') {
+            cookies.setItem('language', 1)
+            arrow[0].style = 'display:block'
+            arrow[2].style = 'display:block'
+            arrow[1].style = 'display:none'
+            arrow[3].style = 'display:none'
+            lang = zh
+        } else {
+            cookies.setItem('language', 2)
+            arrow[1].style = 'display:block'
+            arrow[3].style = 'display:block'
+            arrow[0].style = 'display:none'
+            arrow[2].style = 'display:none'
+            lang = en
+        }
+        loadProperties()
+    }
+
+    // 显示接入环境 语言选项
+    function showSettingMenu(e, data) {
+        const menu = document.querySelectorAll('.set-bg')
+        const trg4 = document.querySelector('#trg4')
+        if (data === 1) {
+            if (menu[0].style.display === 'block') {
+                menu[0].style = 'display:none';
+                trg4.style = 'transform:rotate(0deg)'
+            } else {
+                menu[0].style = 'display:block';
+                trg4.style = 'transform:rotate(180deg)'
+            }
+        }
+    }
+
+    // 麦克风开启
+    function selectMP(e) {
+        if (microphoneStatus) {
+            microphoneStatus = false;
+            e.classList.remove('is-checked');
+        } else {
+            microphoneStatus = true;
+            e.classList.add('is-checked');
+        }
+        cookies.setItem('microphoneStatus', microphoneStatus); // 缓存
+    }
+
+    // 摄像头开启
+    function selectCamera(e) {
+        if (cameraStatus) {
+            cameraStatus = false;
+            e.classList.remove('is-checked');
+        } else {
+            cameraStatus = true;
+            e.classList.add('is-checked');
+        }
+        cookies.setItem('cameraStatus', cameraStatus); // 缓存
+    }
+
+    // 大班课低延迟模式
+    function selectLow(e) {
+        if (lowDelayStatus) {
+            lowDelayStatus = false;
+            e.classList.remove('is-checked');
+        } else {
+            lowDelayStatus = true;
+            e.classList.add('is-checked');
+        }
+        cookies.setItem('lowDelay', lowDelayStatus); // 缓存
+    }
+    // 开启笔锋
+    function selectHandwriting(e) {
+        if (enableHandwriting) {
+            enableHandwriting = false;
+            e.classList.remove('is-checked');
+        } else {
+            enableHandwriting = true;
+            e.classList.add('is-checked');
+        }
+        cookies.setItem('enableHandwriting', enableHandwriting); // 缓存 
+    }
+
+    // 点击其他位置收起弹窗
+    function handleClick(e) {
+        if (e.path.some((item) => item.className === 'options type-menu' || item.className === 'type-bg')) return
+        const type = document.querySelectorAll('.type-bg')
+        const trg2 = document.querySelector('#trg2')
+        type[0].style = 'display:none';
+        trg2.style = 'transform:rotate(0deg)'
+    }
+
+
+    // 检查设置
+    function checkSettings() {
+        const MPDiv = document.getElementsByClassName('MP')[0];
+        const CMDiv = document.getElementsByClassName('CM')[0];
+        const LDDiv = document.getElementsByClassName('LD')[0];
+        const HandwritingDiv = document.querySelector('.Handwriting');
+        const textEnv = document.querySelectorAll('.env')
+        const textLang = document.querySelectorAll('.language')
+        const arrow1 = document.querySelectorAll('.arrow1')
+        const arrow2 = document.querySelectorAll('.arrow2')
+        if (MPDiv) {
+            if (microphoneStatus) {
+                MPDiv.classList.add('is-checked');
+            } else {
+                MPDiv.classList.remove('is-checked');
+            }
+        }
+        if (CMDiv) {
+            if (cameraStatus) {
+                CMDiv.classList.add('is-checked');
+            } else {
+                CMDiv.classList.remove('is-checked');
+            }
+        }
+        if (LDDiv) {
+            if (lowDelayStatus) {
+                LDDiv.classList.add('is-checked');
+            } else {
+                LDDiv.classList.remove('is-checked');
+            }
+        }
+        if (HandwritingDiv) {
+            if (enableHandwriting) {
+                HandwritingDiv.classList.add('is-checked');
+            } else {
+                HandwritingDiv.classList.remove('is-checked');
+            }
+        }
+        if (language == 1) {
+            textLang[0].textContent = '简体中文';
+            textLang[1].textContent = '简体中文';
+            arrow2[0].style = 'display:block'
+            arrow2[2].style = 'display:block'
+        } else {
+            textLang[0].textContent = "English"
+            textLang[1].textContent = "English"
+            arrow2[1].style = 'display:block'
+            arrow2[3].style = 'display:block'
+        }
+    }
+
+    // 加入房间失败后，返回本页面，保证按钮可点击
+    window.onload = function () {
+        if (document.querySelector('input[name="roomID"]').value && document.querySelector(
+            'input[name="userName"]')
+            .value) {
+            addBtnEl.disabled = false;
+        }
+    }
+</script>
